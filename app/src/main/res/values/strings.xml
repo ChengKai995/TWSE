@@ -2,6 +2,7 @@
     <string name="app_name">KaiTwse</string>
     <string name="stock_list_title">上市股票資訊</string>
     <string name="stock_list_empty">目前沒有股票資料</string>
+    <string name="stock_list_error">股票資料載入失敗</string>
     <string name="stock_menu_title">選單</string>
     <string name="stock_menu_content_description">開啟選單</string>
 </resources>

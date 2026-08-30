@@ -46,6 +46,17 @@
             android:layout_gravity="center"
             android:padding="24dp"
             android:text="@string/stock_list_empty"
+            android:visibility="gone"
+            android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+        <TextView
+            android:id="@+id/stock_error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="24dp"
+            android:text="@string/stock_list_error"
+            android:visibility="gone"
             android:textAppearance="?attr/textAppearanceBodyLarge" />
 
     </FrameLayout>

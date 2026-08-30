@@ -4,25 +4,25 @@ import com.google.gson.annotations.SerializedName
 
 data class StockDayAllDtoItem(
     @SerializedName("Change")
-    val change: String,
+    val change: String?,
     @SerializedName("ClosingPrice")
-    val closingPrice: String,
+    val closingPrice: String?,
     @SerializedName("Code")
-    val code: String,
+    val code: String?,
     @SerializedName("Date")
-    val date: String,
+    val date: String?,
     @SerializedName("HighestPrice")
-    val highestPrice: String,
+    val highestPrice: String?,
     @SerializedName("LowestPrice")
-    val lowestPrice: String,
+    val lowestPrice: String?,
     @SerializedName("Name")
-    val name: String,
+    val name: String?,
     @SerializedName("OpeningPrice")
-    val openingPrice: String,
+    val openingPrice: String?,
     @SerializedName("TradeValue")
-    val tradeValue: String,
+    val tradeValue: String?,
     @SerializedName("TradeVolume")
-    val tradeVolume: String,
+    val tradeVolume: String?,
     @SerializedName("Transaction")
-    val transaction: String
+    val transaction: String?
 )

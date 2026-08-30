@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class StockDayAvgAllDtoItem(
     @SerializedName("ClosingPrice")
-    val closingPrice: String,
+    val closingPrice: String?,
     @SerializedName("Code")
-    val code: String,
+    val code: String?,
     @SerializedName("Date")
-    val date: String,
+    val date: String?,
     @SerializedName("MonthlyAveragePrice")
-    val monthlyAveragePrice: String,
+    val monthlyAveragePrice: String?,
     @SerializedName("Name")
-    val name: String
+    val name: String?
 )
