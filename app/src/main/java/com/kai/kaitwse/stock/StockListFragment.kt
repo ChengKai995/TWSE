@@ -5,18 +5,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.kai.kaitwse.R
 import com.kai.kaitwse.common.applyNavigationBarPadding
 import com.kai.kaitwse.common.applyStatusBarPadding
+import com.kai.kaitwse.databinding.FragmentStockListBinding
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,29 +26,29 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
         private const val MENU_ACTION_ID = 1
     }
 
+    private var _binding: FragmentStockListBinding? = null
+    private val binding: FragmentStockListBinding
+        get() = _binding!!
+
     private val viewModel: StockListViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentStockListBinding.bind(view)
 
-        view.applyStatusBarPadding()
-        setupToolbar(view.findViewById(R.id.stock_toolbar))
+        binding.root.applyStatusBarPadding()
+        setupToolbar(binding.stockToolbar)
 
-        view.findViewById<RecyclerView>(R.id.stock_recycler_view).apply {
+        binding.stockRecyclerView.apply {
             applyNavigationBarPadding()
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
 
-        observeUiState(view)
+        observeUiState()
     }
 
-    private fun observeUiState(view: View) {
-        val loadingView = view.findViewById<ProgressBar>(R.id.stock_loading)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.stock_recycler_view)
-        val emptyView = view.findViewById<TextView>(R.id.stock_empty_view)
-        val errorView = view.findViewById<TextView>(R.id.stock_error_view)
-
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { state ->
@@ -59,12 +57,12 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
                     val showEmpty = !showLoading && state.errorMessage == null && state.items.isEmpty()
                     val showContent = !showLoading && state.items.isNotEmpty()
 
-                    loadingView.visibility = if (showLoading) View.VISIBLE else View.GONE
-                    errorView.visibility = if (showError) View.VISIBLE else View.GONE
-                    emptyView.visibility = if (showEmpty) View.VISIBLE else View.GONE
-                    recyclerView.visibility = if (showContent) View.VISIBLE else View.GONE
+                    binding.stockLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
+                    binding.stockErrorView.visibility = if (showError) View.VISIBLE else View.GONE
+                    binding.stockEmptyView.visibility = if (showEmpty) View.VISIBLE else View.GONE
+                    binding.stockRecyclerView.visibility = if (showContent) View.VISIBLE else View.GONE
 
-                    errorView.text = state.errorMessage.orEmpty()
+                    binding.stockErrorView.text = state.errorMessage.orEmpty()
 
                     Log.d(
                         TAG,
@@ -73,6 +71,11 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun setupToolbar(toolbar: MaterialToolbar) {
