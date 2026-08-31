@@ -7,6 +7,7 @@ import com.kai.kaitwse.repositories.StockRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,7 @@ class StockListViewModel(
 
     private val _uiState = MutableStateFlow(StockListUiState())
     val uiState: StateFlow<StockListUiState> = _uiState.asStateFlow()
+    private var originalItems: List<StockListItemUiState> = emptyList()
 
     init {
         fetchInitialData()
@@ -27,7 +29,12 @@ class StockListViewModel(
 
     private fun fetchInitialData() {
         viewModelScope.launch {
-            _uiState.value = StockListUiState(isLoading = true)
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    errorMessage = null,
+                )
+            }
             Log.d(TAG, "fetchInitialData: start")
 
             val stockDayAllDeferred = async { stockRepository.getStockDayAll() }
@@ -53,10 +60,13 @@ class StockListViewModel(
                     Log.e(TAG, "STOCK_DAY_AVG_ALL failed", it)
                 }
 
-                _uiState.value = StockListUiState(
-                    isLoading = false,
-                    errorMessage = "股票資料載入失敗",
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        items = emptyList(),
+                        errorMessage = "股票資料載入失敗",
+                    )
+                }
                 return@launch
             }
 
@@ -76,11 +86,43 @@ class StockListViewModel(
                     stockDayAvgItem = stockDayAvgAllByCode[stockDayItem.code.orEmpty()],
                 )
             }
+            originalItems = items
 
-            _uiState.value = StockListUiState(
-                isLoading = false,
-                items = items,
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    items = applySort(items, it.currentSortOrder),
+                    errorMessage = null,
+                )
+            }
+        }
+    }
+
+    fun sortByCodeAscending() {
+        updateSortedItems(StockSortOrder.ASCENDING)
+    }
+
+    fun sortByCodeDescending() {
+        updateSortedItems(StockSortOrder.DESCENDING)
+    }
+
+    private fun updateSortedItems(sortOrder: StockSortOrder) {
+        _uiState.update {
+            it.copy(
+                items = applySort(originalItems, sortOrder),
+                currentSortOrder = sortOrder,
             )
+        }
+    }
+
+    private fun applySort(
+        items: List<StockListItemUiState>,
+        sortOrder: StockSortOrder,
+    ): List<StockListItemUiState> {
+        return when (sortOrder) {
+            StockSortOrder.NONE -> items
+            StockSortOrder.ASCENDING -> items.sortedBy { it.code }
+            StockSortOrder.DESCENDING -> items.sortedByDescending { it.code }
         }
     }
 }
@@ -89,6 +131,7 @@ data class StockListUiState(
     val isLoading: Boolean = false,
     val items: List<StockListItemUiState> = emptyList(),
     val errorMessage: String? = null,
+    val currentSortOrder: StockSortOrder = StockSortOrder.NONE,
 )
 
 data class StockListItemUiState(
@@ -106,3 +149,9 @@ data class StockListItemUiState(
     val closingPriceTrend: PriceTrend,
     val changeTrend: PriceTrend,
 )
+
+enum class StockSortOrder {
+    NONE,
+    ASCENDING,
+    DESCENDING,
+}
