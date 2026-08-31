@@ -55,7 +55,7 @@ class StockListViewModel(
 
                 _uiState.value = StockListUiState(
                     isLoading = false,
-                    errorMessage = "API request failed. Check Logcat.",
+                    errorMessage = "股票資料載入失敗",
                 )
                 return@launch
             }

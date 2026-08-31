@@ -4,4 +4,7 @@
     <color name="app_surface">#FF121212</color>
     <color name="app_on_surface">#FFF3F4F6</color>
     <color name="app_toolbar_divider">#26FFFFFF</color>
+    <color name="stock_item_background">#FF2F2F37</color>
+    <color name="stock_positive">#FFF87171</color>
+    <color name="stock_negative">#FF22C55E</color>
 </resources>
