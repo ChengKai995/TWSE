@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kai.kaitwse.R
 import com.kai.kaitwse.databinding.ItemStockBinding
 
-class StockListAdapter : ListAdapter<StockListItemUiState, StockListAdapter.StockViewHolder>(DiffCallback) {
+class StockListAdapter(
+    private val onItemClick: (StockListItemUiState) -> Unit,
+) : ListAdapter<StockListItemUiState, StockListAdapter.StockViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockViewHolder {
         val binding = ItemStockBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -23,14 +25,17 @@ class StockListAdapter : ListAdapter<StockListItemUiState, StockListAdapter.Stoc
     }
 
     override fun onBindViewHolder(holder: StockViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onItemClick)
     }
 
     class StockViewHolder(
         private val binding: ItemStockBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: StockListItemUiState) {
+        fun bind(
+            item: StockListItemUiState,
+            onItemClick: (StockListItemUiState) -> Unit,
+        ) {
             bindTextView(binding.textStockCode, item.code)
             bindTextView(binding.textStockName, item.name)
             bindTextView(binding.textOpeningPrice, item.openingPrice)
@@ -42,6 +47,9 @@ class StockListAdapter : ListAdapter<StockListItemUiState, StockListAdapter.Stoc
             bindTextView(binding.textTransaction, item.transaction)
             bindTextView(binding.textTradeVolume, item.tradeVolume)
             bindTextView(binding.textTradeValue, item.tradeValue)
+            binding.root.setOnClickListener {
+                onItemClick(item)
+            }
         }
 
         private fun bindTextView(

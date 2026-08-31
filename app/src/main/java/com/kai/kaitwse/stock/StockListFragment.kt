@@ -33,7 +33,10 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
         get() = _binding!!
 
     private val viewModel: StockListViewModel by viewModels()
-    private val stockListAdapter = StockListAdapter()
+    private val stockListAdapter = StockListAdapter {
+
+    }
+    private var shouldScrollToTopAfterSort = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,6 +44,7 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
 
         binding.root.applyStatusBarPadding()
         setupToolbar(binding.stockToolbar)
+        setupSortResultListener()
 
         binding.stockRecyclerView.apply {
             applyNavigationBarPadding()
@@ -61,7 +65,14 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
                     val showEmpty = !showLoading && state.errorMessage == null && state.items.isEmpty()
                     val showContent = !showLoading && state.items.isNotEmpty()
 
-                    stockListAdapter.submitList(state.items)
+                    stockListAdapter.submitList(state.items) {
+                        if (shouldScrollToTopAfterSort) {
+                            binding.stockRecyclerView.stopScroll()
+                            (binding.stockRecyclerView.layoutManager as? LinearLayoutManager)
+                                ?.scrollToPositionWithOffset(0, 0)
+                            shouldScrollToTopAfterSort = false
+                        }
+                    }
                     binding.stockErrorView.text = state.errorMessage.orEmpty()
                     binding.stockLoading.updateVisibilityAnimated(showLoading)
                     binding.stockErrorView.updateVisibilityAnimated(showError)
@@ -79,6 +90,28 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
         binding.stockRecyclerView.adapter = null
         _binding = null
         super.onDestroyView()
+    }
+
+    private fun setupSortResultListener() {
+        parentFragmentManager.setFragmentResultListener(
+            ArgKeys.STOCK_SORT_RESULT_KEY,
+            viewLifecycleOwner,
+        ) { _, bundle ->
+            when (bundle.getString(ArgKeys.STOCK_SORT_ORDER_KEY)) {
+                ArgKeys.STOCK_SORT_ORDER_ASCENDING -> {
+                    shouldScrollToTopAfterSort = true
+                    viewModel.sortByCodeAscending()
+                }
+                ArgKeys.STOCK_SORT_ORDER_DESCENDING -> {
+                    shouldScrollToTopAfterSort = true
+                    viewModel.sortByCodeDescending()
+                }
+            }
+        }
+    }
+
+    private fun showSortBottomSheet() {
+        StockSortBottomSheet().show(parentFragmentManager, StockSortBottomSheet.TAG)
     }
 
     private fun View.updateVisibilityAnimated(shouldShow: Boolean) {
@@ -119,7 +152,7 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 MENU_ACTION_ID -> {
-                    Log.d(TAG, "Toolbar menu clicked")
+                    showSortBottomSheet()
                     true
                 }
 
