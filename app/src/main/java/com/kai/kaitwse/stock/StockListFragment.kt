@@ -18,12 +18,14 @@ import com.kai.kaitwse.databinding.FragmentStockListBinding
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.core.view.isVisible
 
 class StockListFragment : Fragment(R.layout.fragment_stock_list) {
 
     companion object {
         private const val TAG = "StockListFragment"
         private const val MENU_ACTION_ID = 1
+        private const val FADE_DURATION = 500L
     }
 
     private var _binding: FragmentStockListBinding? = null
@@ -31,6 +33,7 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
         get() = _binding!!
 
     private val viewModel: StockListViewModel by viewModels()
+    private val stockListAdapter = StockListAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,6 +44,7 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
 
         binding.stockRecyclerView.apply {
             applyNavigationBarPadding()
+            adapter = stockListAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
@@ -57,25 +61,47 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
                     val showEmpty = !showLoading && state.errorMessage == null && state.items.isEmpty()
                     val showContent = !showLoading && state.items.isNotEmpty()
 
-                    binding.stockLoading.visibility = if (showLoading) View.VISIBLE else View.GONE
-                    binding.stockErrorView.visibility = if (showError) View.VISIBLE else View.GONE
-                    binding.stockEmptyView.visibility = if (showEmpty) View.VISIBLE else View.GONE
-                    binding.stockRecyclerView.visibility = if (showContent) View.VISIBLE else View.GONE
-
+                    stockListAdapter.submitList(state.items)
                     binding.stockErrorView.text = state.errorMessage.orEmpty()
-
-                    Log.d(
-                        TAG,
-                        "uiState: loading=${state.isLoading}, items=${state.items.size}, errorMessage=${state.errorMessage}",
-                    )
+                    binding.stockLoading.updateVisibilityAnimated(showLoading)
+                    binding.stockErrorView.updateVisibilityAnimated(showError)
+                    binding.stockEmptyView.updateVisibilityAnimated(showEmpty)
+                    binding.stockRecyclerView.updateVisibilityAnimated(showContent)
+                    if (showError) {
+                        Log.e(TAG, "Failed to show stock list: ${state.errorMessage}")
+                    }
                 }
             }
         }
     }
 
     override fun onDestroyView() {
+        binding.stockRecyclerView.adapter = null
         _binding = null
         super.onDestroyView()
+    }
+
+    private fun View.updateVisibilityAnimated(shouldShow: Boolean) {
+
+        if (shouldShow == isVisible) return
+
+        animate().cancel()
+        if (shouldShow) {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate()
+                .alpha(1f)
+                .setDuration(FADE_DURATION)
+                .start()
+        } else {
+            animate()
+                .alpha(0f)
+                .setDuration(FADE_DURATION)
+                .withEndAction {
+                    visibility = View.GONE
+                }
+                .start()
+        }
     }
 
     private fun setupToolbar(toolbar: MaterialToolbar) {

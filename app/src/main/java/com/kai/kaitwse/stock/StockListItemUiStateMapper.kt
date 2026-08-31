@@ -2,6 +2,8 @@ package com.kai.kaitwse.stock
 
 import com.kai.kaitwse.dto.stock_day_all.StockDayAllDtoItem
 import com.kai.kaitwse.dto.stock_day_avg_all.StockDayAvgAllDtoItem
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 enum class PriceTrend {
     UP,
@@ -25,11 +27,11 @@ fun StockDayAllDtoItem.toStockListItemUiState(
         closingPrice = closingPriceValue,
         highestPrice = highestPrice.orEmpty(),
         lowestPrice = lowestPrice.orEmpty(),
-        change = changeValue,
+        change = changeValue.toTwoDecimalText(),
         monthlyAveragePrice = monthlyAveragePriceValue,
         transaction = transaction.orEmpty(),
         tradeVolume = tradeVolume.orEmpty(),
-        tradeValue = tradeValue.orEmpty(),
+        tradeValue = tradeValue.orEmpty().toMillionText(),
         closingPriceTrend = getClosingPriceTrend(
             closingPrice = closingPriceValue,
             monthlyAveragePrice = monthlyAveragePriceValue,
@@ -63,4 +65,15 @@ private fun getClosingPriceTrend(
     } else {
         PriceTrend.FLAT
     }
+}
+
+private fun String.toMillionText(): String {
+    val value = toBigDecimalOrNull() ?: return this
+    val millionValue = value.divide(BigDecimal("1000000"), 2, RoundingMode.HALF_UP)
+    return "${millionValue.toPlainString()}M"
+}
+
+private fun String.toTwoDecimalText(): String {
+    val value = toBigDecimalOrNull() ?: return this
+    return value.setScale(2, RoundingMode.HALF_UP).toPlainString()
 }

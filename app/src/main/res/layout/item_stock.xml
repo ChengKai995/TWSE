@@ -8,10 +8,13 @@
     android:layout_marginHorizontal="12dp"
     android:layout_marginTop="12dp"
     android:layout_marginBottom="4dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/stock_item_background"
     app:cardCornerRadius="24dp"
     app:cardElevation="0dp"
     app:strokeColor="@color/app_toolbar_divider"
+    app:rippleColor="@color/app_toolbar_divider"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -26,7 +29,7 @@
             android:layout_height="wrap_content"
             tools:text="(股票代號)"
             android:textColor="@color/app_on_surface"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/text_stock_name"
@@ -64,7 +67,7 @@
                         android:layout_weight="1"
                         android:text="開盤價"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_opening_price"
@@ -75,7 +78,7 @@
                         android:layout_weight="1"
                         tools:text="(開盤價)"
                         android:textColor="@color/stock_positive"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,7 +95,7 @@
                         android:gravity="end"
                         android:text="最高價"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_highest_price"
@@ -103,7 +106,7 @@
                         android:gravity="end"
                         tools:text="(最高價)"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,7 +123,7 @@
                         android:gravity="end"
                         android:text="漲跌價差"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_change"
@@ -131,7 +134,7 @@
                         android:gravity="end"
                         tools:text="(漲跌價差)"
                         android:textColor="@color/stock_positive"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -154,7 +157,7 @@
                         android:gravity="end"
                         android:text="收盤價"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_closing_price"
@@ -165,7 +168,7 @@
                         android:gravity="end"
                         tools:text="(收盤價)"
                         android:textColor="@color/stock_positive"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -182,7 +185,7 @@
                         android:gravity="end"
                         android:text="最低價"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_lowest_price"
@@ -193,7 +196,7 @@
                         android:gravity="end"
                         tools:text="(最低價)"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -210,7 +213,7 @@
                         android:gravity="end"
                         android:text="月平均價"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/text_monthly_average_price"
@@ -221,7 +224,7 @@
                         android:gravity="end"
                         tools:text="(月平均價)"
                         android:textColor="@color/app_on_surface"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
