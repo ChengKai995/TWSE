@@ -71,6 +71,7 @@ class StockListFragment : Fragment(R.layout.fragment_stock_list) {
             getString(R.string.stock_menu_title),
         ).apply {
             setIcon(android.R.drawable.ic_menu_sort_by_size)
+            setContentDescription(getString(R.string.stock_menu_content_description))
             setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
 

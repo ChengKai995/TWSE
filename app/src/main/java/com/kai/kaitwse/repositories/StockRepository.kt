@@ -10,7 +10,8 @@ import com.kai.kaitwse.network.StockService
 private val TAG = "StockRepository"
 class StockRepository(
     private val stockService: StockService = RetrofitClient.stockService
-) {
+) : StockDataSource {
+    override
     suspend fun getStockDayAll(): Result<StockDayAllDto> = runCatching {
         Log.d(TAG, "StockDayAll_Request")
         val response = stockService.getStockDayAll()
@@ -18,6 +19,7 @@ class StockRepository(
         response
     }
 
+    override
     suspend fun getBwibbuAll(): Result<BwibbuAllDto> = runCatching {
         Log.d(TAG, "BwibbuAll_Request")
         val response = stockService.getBwibbuAll()
@@ -25,11 +27,11 @@ class StockRepository(
         response
     }
 
+    override
     suspend fun getStockDayAvgAll(): Result<StockDayAvgAllDto> = runCatching {
         Log.d(TAG, "StockDayAvgAll_Request")
         val response = stockService.getStockDayAvgAll()
         Log.d(TAG, "StockDayAvgAll_Response: ${response.size}")
         response
     }
-
 }
