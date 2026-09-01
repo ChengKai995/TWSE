@@ -1,5 +1,6 @@
 package com.kai.kaitwse.stock
 
+import com.kai.kaitwse.dto.bwibbu_all.BwibbuAllItem
 import com.kai.kaitwse.dto.stock_day_all.StockDayAllDtoItem
 import com.kai.kaitwse.dto.stock_day_avg_all.StockDayAvgAllDtoItem
 import java.math.BigDecimal
@@ -13,6 +14,7 @@ enum class PriceTrend {
 }
 
 fun StockDayAllDtoItem.toStockListItemUiState(
+    bwibbuItem: BwibbuAllItem?,
     stockDayAvgItem: StockDayAvgAllDtoItem?,
 ): StockListItemUiState {
     val stockCode = code.orEmpty()
@@ -32,6 +34,9 @@ fun StockDayAllDtoItem.toStockListItemUiState(
         transaction = transaction.orEmpty(),
         tradeVolume = tradeVolume.orEmpty(),
         tradeValue = tradeValue.orEmpty().toMillionText(),
+        peRatio = bwibbuItem?.peRatio.orEmpty(),
+        dividendYield = bwibbuItem?.dividendYield.orEmpty(),
+        pbRatio = bwibbuItem?.pbRatio.orEmpty(),
         closingPriceTrend = getClosingPriceTrend(
             closingPrice = closingPriceValue,
             monthlyAveragePrice = monthlyAveragePriceValue,

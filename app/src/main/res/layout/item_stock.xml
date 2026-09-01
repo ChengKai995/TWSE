@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:layout_weight="1"
-                        android:text="開盤價"
+                        android:text="@string/stock_item_opening_price"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="最高價"
+                        android:text="@string/stock_item_highest_price"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="漲跌價差"
+                        android:text="@string/stock_item_change"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="收盤價"
+                        android:text="@string/stock_item_closing_price"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -183,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="最低價"
+                        android:text="@string/stock_item_lowest_price"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="月平均價"
+                        android:text="@string/stock_item_monthly_average_price"
                         android:textColor="@color/app_on_surface"
                         android:textSize="14sp" />
 
@@ -247,7 +247,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="成交筆數"
+                    android:text="@string/stock_item_transaction"
                     android:textColor="@color/app_on_surface"
                     android:textSize="12sp" />
 
@@ -271,7 +271,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="成交股數"
+                    android:text="@string/stock_item_trade_volume"
                     android:textColor="@color/app_on_surface"
                     android:textSize="12sp" />
 
@@ -295,7 +295,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="成交金額"
+                    android:text="@string/stock_item_trade_value"
                     android:textColor="@color/app_on_surface"
                     android:textSize="12sp" />
 

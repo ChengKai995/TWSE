@@ -1,10 +1,8 @@
 package com.kai.kaitwse.stock
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -57,24 +55,23 @@ class StockListAdapter(
             rawText: String,
             trend: PriceTrend? = null,
         ) {
-            val hasValue = rawText.isNotBlank()
-            val displayText = if (hasValue) rawText else " - "
-            val colorRes = if (rawText.isBlank() || trend == null) {
-                R.color.app_on_surface
-            } else when (trend) {
+            if (rawText.isBlank()) {
+                textView.text = " - "
+                textView.setTextColor(getColor(itemView.context, R.color.app_on_surface))
+                return
+            }
+
+            val colorRes = when (trend) {
                 PriceTrend.UP -> R.color.stock_positive
                 PriceTrend.DOWN -> R.color.stock_negative
                 PriceTrend.FLAT,
                 PriceTrend.UNKNOWN,
+                null,
                 -> R.color.app_on_surface
             }
 
-            textView.text = displayText
-            textView.setTextColor(
-                getColor(itemView.context,
-                    if (hasValue) colorRes else R.color.app_on_surface,
-                ),
-            )
+            textView.text = rawText
+            textView.setTextColor(getColor(itemView.context, colorRes))
         }
     }
 

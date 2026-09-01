@@ -60,6 +60,11 @@
             android:visibility="gone"
             android:textAppearance="?attr/textAppearanceBodyLarge" />
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/stock_compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </FrameLayout>
 
 </LinearLayout>

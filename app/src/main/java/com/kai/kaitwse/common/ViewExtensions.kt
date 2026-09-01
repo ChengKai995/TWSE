@@ -7,11 +7,19 @@ import androidx.core.view.doOnAttach
 import androidx.core.view.updatePadding
 
 fun View.applyStatusBarPadding() {
+    val initialLeftPadding = paddingLeft
+    val initialRightPadding = paddingRight
     val initialTopPadding = paddingTop
 
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
-        val statusBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
-        view.updatePadding(top = initialTopPadding + statusBarInsets.top)
+        val topInsets = windowInsets.getInsets(
+            WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout(),
+        )
+        view.updatePadding(
+            left = initialLeftPadding + topInsets.left,
+            top = initialTopPadding + topInsets.top,
+            right = initialRightPadding + topInsets.right,
+        )
         windowInsets
     }
 
@@ -19,11 +27,17 @@ fun View.applyStatusBarPadding() {
 }
 
 fun View.applyNavigationBarPadding() {
+    val initialLeftPadding = paddingLeft
+    val initialRightPadding = paddingRight
     val initialBottomPadding = paddingBottom
 
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
         val navigationBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars())
-        view.updatePadding(bottom = initialBottomPadding + navigationBarInsets.bottom)
+        view.updatePadding(
+            left = initialLeftPadding + navigationBarInsets.left,
+            right = initialRightPadding + navigationBarInsets.right,
+            bottom = initialBottomPadding + navigationBarInsets.bottom,
+        )
         windowInsets
     }
 
