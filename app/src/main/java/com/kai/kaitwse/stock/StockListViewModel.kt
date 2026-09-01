@@ -3,16 +3,17 @@ package com.kai.kaitwse.stock
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kai.kaitwse.repositories.StockDataSource
 import com.kai.kaitwse.repositories.StockRepository
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class StockListViewModel(
-    private val stockRepository: StockRepository = StockRepository()
+    private val stockRepository: StockDataSource = StockRepository(),
 ) : ViewModel() {
 
     companion object {
