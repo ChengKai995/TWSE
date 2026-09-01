@@ -11,4 +11,8 @@
         <item name="android:enforceStatusBarContrast">false</item>
         <item name="android:enforceNavigationBarContrast">false</item>
     </style>
+
+    <style name="ThemeOverlay.KaiTwse.Toolbar" parent="">
+        <item name="actionBarItemBackground">@android:color/transparent</item>
+    </style>
 </resources>

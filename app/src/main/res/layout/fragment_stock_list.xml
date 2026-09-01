@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/app_background"
+        android:theme="@style/ThemeOverlay.KaiTwse.Toolbar"
         android:paddingHorizontal="8dp"
         android:title="@string/stock_list_title"
         app:titleTextColor="@color/app_on_surface" />
@@ -46,7 +47,23 @@
             android:layout_gravity="center"
             android:padding="24dp"
             android:text="@string/stock_list_empty"
+            android:visibility="gone"
             android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+        <TextView
+            android:id="@+id/stock_error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="24dp"
+            android:text="@string/stock_list_error"
+            android:visibility="gone"
+            android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/stock_compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 
