@@ -73,16 +73,16 @@ class StockListViewModel(
             val stockDayAll = stockDayAllResult.getOrThrow()
             val bwibbuAll = bwibbuAllResult.getOrThrow()
             val stockDayAvgAll = stockDayAvgAllResult.getOrThrow()
-            Log.d(
-                TAG,
-                "fetchInitialData success: stockDayAll=${stockDayAll.size}, bwibbuAll=${bwibbuAll.size}, stockDayAvgAll=${stockDayAvgAll.size}",
-            )
 
+            val bwibbuAllByCode = bwibbuAll
+                .filter { !it.code.isNullOrBlank() }
+                .associateBy { it.code.orEmpty() }
             val stockDayAvgAllByCode = stockDayAvgAll
                 .filter { !it.code.isNullOrBlank() }
                 .associateBy { it.code.orEmpty() }
             val items = stockDayAll.map { stockDayItem ->
                 stockDayItem.toStockListItemUiState(
+                    bwibbuItem = bwibbuAllByCode[stockDayItem.code.orEmpty()],
                     stockDayAvgItem = stockDayAvgAllByCode[stockDayItem.code.orEmpty()],
                 )
             }
@@ -104,6 +104,30 @@ class StockListViewModel(
 
     fun sortByCodeDescending() {
         updateSortedItems(StockSortOrder.DESCENDING)
+    }
+
+    fun showSortSheet() {
+        _uiState.update {
+            it.copy(isSortSheetVisible = true)
+        }
+    }
+
+    fun hideSortSheet() {
+        _uiState.update {
+            it.copy(isSortSheetVisible = false)
+        }
+    }
+
+    fun showStockInfo(item: StockListItemUiState) {
+        _uiState.update {
+            it.copy(selectedStockInfo = item)
+        }
+    }
+
+    fun hideStockInfo() {
+        _uiState.update {
+            it.copy(selectedStockInfo = null)
+        }
     }
 
     private fun updateSortedItems(sortOrder: StockSortOrder) {
@@ -132,6 +156,8 @@ data class StockListUiState(
     val items: List<StockListItemUiState> = emptyList(),
     val errorMessage: String? = null,
     val currentSortOrder: StockSortOrder = StockSortOrder.NONE,
+    val isSortSheetVisible: Boolean = false,
+    val selectedStockInfo: StockListItemUiState? = null,
 )
 
 data class StockListItemUiState(
@@ -146,6 +172,9 @@ data class StockListItemUiState(
     val transaction: String,
     val tradeVolume: String,
     val tradeValue: String,
+    val peRatio: String,
+    val dividendYield: String,
+    val pbRatio: String,
     val closingPriceTrend: PriceTrend,
     val changeTrend: PriceTrend,
 )
